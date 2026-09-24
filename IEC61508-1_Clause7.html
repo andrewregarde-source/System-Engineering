@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IEC 61508-1 Clause 7 — Overall Safety Lifecycle Requirements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#0a0e16;--panel:#111723;--panel2:#0d131d;--line:#1f2937;--text:#e6edf3;--muted:#8b98a9;--soft:#cbd5e1;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 60px}
+.home{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text);text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-bottom:18px}
+.home:hover,.tools button:hover{border-color:#334155;background:#162030}
+.home svg{width:16px;height:16px}
+h1{margin:0;font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.02em}
+.sub{margin:6px 0 0;color:var(--muted);font-size:14px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0 18px}
+.bar input{flex:1;min-width:220px;font:inherit;font-size:14px;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.bar input:focus{outline:2px solid #5aa9ff;outline-offset:1px}
+.tools{display:flex;gap:8px}
+.tools button{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer}
+.disclaimer{font-size:12.5px;color:var(--muted);background:var(--panel);border:1px dashed #334155;border-radius:12px;padding:10px 14px;margin-bottom:18px}
+
+details{border-radius:14px}
+summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary:focus-visible{outline:2px solid var(--c,#5aa9ff);outline-offset:2px;border-radius:10px}
+.chev{width:22px;height:22px;flex-shrink:0;display:grid;place-items:center;border-radius:7px;background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c);font-size:13px;font-weight:700;transition:transform .15s}
+details[open]>summary .chev{transform:rotate(90deg)}
+
+.clause{--c:#5aa9ff;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--c);margin-bottom:12px}
+.clause>summary{padding:14px 16px}
+.clause>summary .num{font-weight:700;color:var(--c);font-variant-numeric:tabular-nums;min-width:44px}
+.clause>summary .ttl{font-weight:650;font-size:16px}
+.box{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--bg);background:var(--c);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.body{padding:0 16px 14px 16px}
+.lead{color:var(--soft);font-size:14px;margin:0 0 10px}
+
+.group{background:var(--panel2);border:1px solid var(--line);margin-top:10px}
+.group>summary{padding:10px 12px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.group>summary .cnt{margin-left:auto;font-weight:500;letter-spacing:0;text-transform:none}
+.items{padding:2px 12px 10px}
+.req{display:grid;grid-template-columns:78px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.req:first-child{border-top:0}
+.req .id{font-weight:700;color:var(--c);font-variant-numeric:tabular-nums;font-size:13px;padding-top:1px}
+.req ul{margin:6px 0 0;padding-left:18px;color:var(--soft)}
+.req li{margin:2px 0}
+.tag{display:inline-block;font-size:11px;font-weight:600;color:var(--muted);border:1px solid #334155;border-radius:6px;padding:0 6px;margin-left:6px}
+.full{margin-top:6px;padding:8px 10px;border-radius:8px;background:#0a0f18;border:1px solid #243041;color:var(--soft);font-size:13.5px;white-space:pre-wrap}
+
+.tbl{overflow-x:auto;margin:8px 0}
+table{border-collapse:collapse;font-size:13.5px;min-width:360px}
+th,td{border:1px solid #273244;padding:7px 12px;text-align:center}
+th{background:#162030;font-weight:600}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--soft);margin:6px 0}
+.flow span{background:#162030;border:1px solid #273244;border-radius:8px;padding:4px 8px}
+.hidden{display:none!important}
+mark{background:#fbbf24;color:#0a0e16;border-radius:3px;padding:0 2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" id="homeLink" href="#" title="Back to the overall safety lifecycle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+    Home · IEC 61508 Safety Lifecycle
+  </a>
+  <h1>IEC 61508-1 · Clause 7 — Overall Safety Lifecycle Requirements</h1>
+  <p class="sub">Clauses 7.1.3 to 7.15, one card per lifecycle box. Click a clause to expand it, then its objectives or requirements.</p>
+  <div class="bar">
+    <input id="q" type="search" placeholder="Search clauses, e.g. SIL, proof test, MTTR, commissioning…" aria-label="Search clauses">
+    <div class="tools">
+      <button id="expandAll" type="button">Expand all</button>
+      <button id="collapseAll" type="button">Collapse all</button>
+    </div>
+  </div>
+  <div class="disclaimer">Summaries are paraphrased study notes, not the normative wording. Always check the official IEC 61508-1:2010 text. To keep the exact wording beside a summary, paste it from your licensed copy into that item's <code>full:</code> field in the script.</div>
+  <div id="list"></div>
+</div>
+<script>
+/* HOME LINK — same rules as before: forward slashes, relative paths */
+const HOME_URL = 'IEC61508_Safety_Lifecycle_Overview.html';
+document.getElementById('homeLink').href = HOME_URL;
+
+const COL={gen:'#8b98a9',an:'#5aa9ff',pl:'#4ade80',re:'#fbbf24',oth:'#94a3b8',op:'#a78bfa'};
+/* Each requirement: [id, summary, optional bullet list, optional {full:'paste official text here'}] */
+const CLAUSES=[
+ {id:'7.1', title:'Overall safety lifecycle — general', box:null, col:COL.gen,
+  obj:[['7.1.3.1','Structure the overall lifecycle phases systematically so the required functional safety of the E/E/PE safety-related systems can be achieved.'],
+       ['7.1.3.2','Document key functional-safety information for the E/E/PE safety-related systems throughout the lifecycle (see Clause 5 and Annex A for documentation structure).']],
+  req:[['7.1.4.1','Figure 2 is the lifecycle used to claim conformance. Any alternative lifecycle must be specified under functional safety management (Clause 6) and still meet every objective and requirement.'],
+       ['7.1.4.2','Functional safety management (Clause 6) runs in parallel with all lifecycle phases.'],
+       ['7.1.4.3','Apply every phase and meet its requirements unless a justification is recorded.'],
+       ['7.1.4.4','Break each phase into elementary activities, each with a defined scope, inputs and outputs.'],
+       ['7.1.4.5','Scope and inputs per phase follow Table 1, unless justified under Clause 6 or set by a sector standard.'],
+       ['7.1.4.6','Outputs per phase follow Table 1, under the same exceptions.'],
+       ['7.1.4.7','Phase outputs must meet the objectives and requirements of 7.2 to 7.17.'],
+       ['7.1.4.8','Verification requirements for every phase are given in 7.18.']]},
+
+ {id:'7.2', title:'Concept', box:1, col:COL.an,
+  lead:'Build enough understanding of the EUC and its physical, legislative and other environment for the later lifecycle activities.',
+  req:[['7.2.2.1','Become thoroughly familiar with the EUC, its required control functions and its physical environment.'],
+       ['7.2.2.2','Identify the likely sources of hazards, hazardous situations and harmful events.'],
+       ['7.2.2.3','Gather information on each hazard, such as duration, intensity, toxicity, exposure limits, mechanical force, explosive conditions, reactivity and flammability.'],
+       ['7.2.2.4','Obtain the current national and international safety regulations.'],
+       ['7.2.2.5','Consider hazards arising from interaction with other equipment, systems and EUCs, whether installed now or planned.'],
+       ['7.2.2.6','Document the information and results of 7.2.2.1 to 7.2.2.5.']]},
+
+ {id:'7.3', title:'Overall scope definition', box:2, col:COL.an,
+  obj:[['7.3.1.1','Determine the boundary of the EUC and the EUC control system.'],
+       ['7.3.1.2','Specify the scope of the hazard and risk analysis (for example process or environmental hazards).']],
+  req:[['7.3.2.1','Draw the boundary to include all equipment and systems, including humans where relevant, associated with the hazards. Several iterations with the hazard and risk analysis may be needed.'],
+       ['7.3.2.2','Specify the physical equipment, including the EUC and its control system, that is in scope of the analysis.'],
+       ['7.3.2.3','Specify the external events to be considered.'],
+       ['7.3.2.4','Specify the equipment and systems associated with the hazards and hazardous events.'],
+       ['7.3.2.5','Specify the types of initiating event to consider:',['component failures','procedural faults','human error','dependent failure mechanisms']],
+       ['7.3.2.6','Document the information and results of 7.3.2.1 to 7.3.2.5.']]},
+
+ {id:'7.4', title:'Hazard and risk analysis', box:3, col:COL.an,
+  obj:[['7.4.1.1','Determine the hazards, hazardous events and hazardous situations of the EUC and its control system, in all operating modes and all reasonably foreseeable circumstances, including faults and foreseeable misuse.'],
+       ['7.4.1.2','Determine the event sequences leading to those hazardous events.'],
+       ['7.4.1.3','Determine the EUC risks associated with those hazardous events.']],
+  req:[['7.4.2.1','Carry out the analysis using the output of scope definition (7.3). Repeat it if later decisions change the basis of earlier ones.'],
+       ['7.4.2.2','Consider eliminating or reducing hazards, ideally at source through inherent safety and good engineering practice.'],
+       ['7.4.2.3','Determine hazards under all foreseeable circumstances, including faults, misuse and malevolent or unauthorised action. Cover human factors and abnormal or infrequent modes. If a security threat is foreseeable, perform a security threat analysis (see IEC 62443). Also check whether a safety function acting on demand, or spuriously, could itself create a new hazard.'],
+       ['7.4.2.4','Determine the event sequences leading to each hazardous event. Consider whether design changes could remove a sequence.'],
+       ['7.4.2.5','Evaluate the likelihood of each hazardous event.'],
+       ['7.4.2.6','Determine the consequences of each hazardous event.'],
+       ['7.4.2.7','Evaluate or estimate the EUC risk for each hazardous event.'],
+       ['7.4.2.8','Qualitative or quantitative techniques may be used (see IEC 61508-5).'],
+       ['7.4.2.9','How far to apply each technique depends on:',['the hazards and their consequences','the complexity of the EUC and its control system','sector practice','legal and regulatory requirements','the EUC risk','the availability of accurate data']],
+       ['7.4.2.10','The analysis must cover:',['each hazardous event and its contributing components','the consequences and likelihood of each event sequence','the tolerable risk for each hazardous event','the measures that reduce or remove hazards and risks','the assumptions made, such as demand rates, failure rates, and any credit taken for operating constraints or human intervention']],
+       ['7.4.2.11','Document the analysis.'],
+       ['7.4.2.12','Maintain the analysis for the EUC and its control system from this phase through to decommissioning. This is a key way to track open hazard issues.']]},
+
+ {id:'7.5', title:'Overall safety requirements', box:4, col:COL.an,
+  lead:'Specify the overall safety functions requirements and overall safety integrity requirements for the E/E/PE safety-related systems and other risk reduction measures.',
+  req:[['7.5.2.1','Derive a set of overall safety functions from the hazardous events, typically one per hazardous event, stated independently of technology (for example "prevent vessel temperature exceeding its limit"). This forms the overall safety functions requirements specification.'],
+       ['7.5.2.2','Where security threats were found, perform a vulnerability analysis and specify security requirements (see IEC 62443).'],
+       ['7.5.2.3','Set a target safety integrity for each overall safety function so that the tolerable risk is met, either quantitatively or qualitatively. This forms the overall safety integrity requirements specification.'],
+       ['7.5.2.4','Express the integrity requirements either as the risk reduction needed or as a tolerable hazardous event rate.'],
+       ['7.5.2.5','If a single EUC control system function is claimed below 10⁻⁵ dangerous failures per hour, the EUC control system counts as safety-related under this standard.'],
+       ['7.5.2.6','If EUC control system failures place demands on safety systems, and the control system is not to be designated safety-related, all of the following apply:',['(a) its claimed dangerous failure rate is backed by operating experience, a recognised reliability analysis, or an industry database','(b) the claim is no lower than 10⁻⁵ dangerous failures per hour','(c) all foreseeable dangerous failure modes are considered in the safety requirements','(d) it is independent of the safety-related systems and other risk reduction measures']],
+       ['7.5.2.7','If any of (a) to (d) cannot be met, designate the EUC control system as safety-related. Its SIL follows from its claimed failure rate using Table 3.']]},
+
+ {id:'7.6', title:'Overall safety requirements allocation', box:5, col:COL.an,
+  obj:[['7.6.1.1','Allocate each overall safety function, with its integrity requirement, to the designated E/E/PE safety-related systems and other risk reduction measures.'],
+       ['7.6.1.2','Allocate a target failure measure and SIL to each safety function carried out by an E/E/PE safety-related system.']],
+  req:[['7.6.2.1','Specify the designated safety-related systems. Tolerable risk may be met by E/E/PE systems, other measures, or both. The standard applies only if an E/E/PE system contributes.'],
+       ['7.6.2.2','Consider the skills and resources available in every phase, since complex technology needs more competence throughout.'],
+       ['7.6.2.3','Allocate each function to one or more systems or measures so that its tolerable risk is met. Allocation is iterative. If tolerable risk cannot be met, change the specifications and repeat.'],
+       ['7.6.2.4','Allocate every function and define its target failure measure (subject to 7.6.2.10).'],
+       ['7.6.2.5','State integrity as PFDavg for low demand mode, or as the average frequency of dangerous failure (PFH, per hour) for high demand or continuous mode.'],
+       ['7.6.2.6','Combine probabilities with appropriate techniques, qualitative or quantitative. Dependencies between systems affect the risk actually achieved.'],
+       ['7.6.2.7','Treat systems as independent only if they:',['have a sufficiently low likelihood of failing simultaneously','are functionally diverse','use diverse technologies','share no common parts, services or support systems, such as power supplies','share no common operation, maintenance or test procedures','and separation constraints have been checked, for example two channels on one board (see IEC 61508-2 Annex E)']],
+       ['7.6.2.8','Where independence cannot be shown, the allocation must account for common cause failures between the control system, the safety systems and the other measures.'],
+       ['7.6.2.9','Once far enough along, express each E/E/PE function as a SIL (Table 2 or 3) and state which target applies: PFDavg for low demand, PFH for high demand, or PFH for continuous mode.'],
+       ['7.6.2.10','If one system implements functions of different SILs without sufficient independence, the shared hardware and software take the highest SIL.'],
+       ['7.6.2.11','For a SIL 4 function:',['(a) first reconsider the application: add non-E/E/PE measures, reduce the severity, or reduce the likelihood','(b) if SIL 4 is kept, perform a quantitative risk assessment that includes common cause failures with systems that place demands on it and with other safety systems']],
+       ['7.6.2.12','Minimum claimable targets: PFDavg of 10⁻⁵ (low demand) and 10⁻⁹ per hour (high demand or continuous).'],
+       ['7.6.2.13','Document the allocation results, assumptions and justifications, including those about other risk reduction measures managed over the EUC life.']],
+  extra:'alloc'},
+
+ {id:'7.7', title:'Overall operation and maintenance planning', box:6, col:COL.pl,
+  lead:'Plan how the E/E/PE safety-related systems will be operated and maintained so that functional safety is kept.',
+  req:[['7.7.2.1','The plan specifies:',['(a) routine actions to maintain functional safety','(b) actions and constraints for start-up, normal operation, testing, disturbances, faults and shutdown, to prevent unsafe states and reduce demands or consequences. This covers operation during faults and maintenance, returning to normal, and bypass conditions and procedures, including permits and authority','(c) records of functional safety audits and tests','(d) records of hazardous events and near-misses','(e) the scope of maintenance, as distinct from modification','(f) actions to take if a hazardous event occurs','(g) the content of the chronological O&M records (see 7.15)']],
+       ['7.7.2.2','If a subsystem with hardware fault tolerance 0 is taken off-line for testing, extra measures must give at least equal integrity. With HFT greater than 0, at least one channel stays in service and testing ends within the MTTR assumed in the calculations.'],
+       ['7.7.2.3','Determine routine maintenance for detecting unrevealed faults by systematic analysis. Undetected faults can mean failure on demand, or extra demands on the safety systems.'],
+       ['7.7.2.4','Agree the plan with those responsible for operating and maintaining the E/E/PE systems, the other risk reduction measures, and any non-safety systems that can place demands on them.']]},
+
+ {id:'7.8', title:'Overall safety validation planning', box:7, col:COL.pl,
+  lead:'Develop the plan for the overall safety validation of the E/E/PE safety-related systems.',
+  req:[['7.8.2.1','The plan includes:',['(a) when validation takes place','(b) who performs it','(c) the relevant EUC modes: preparation, start-up, teach, automatic, manual, semi-automatic, steady state, re-setting, shutdown, maintenance, and foreseeable abnormal conditions','(d) which systems must be validated for each mode before commissioning','(e) the technical strategy, such as analytical methods or statistical tests','(f) how to confirm the allocation is correct and that each function meets its functions and integrity specifications','(g) reference to every output of 7.5 and 7.6','(h) the required environment, such as calibrated tools','(i) pass and fail criteria','(j) how results, especially failures, are evaluated']],
+       ['7.8.2.2','Document the plan. Coordinate it with the E/E/PE and software validation of IEC 61508-2 and -3, and cover interactions between systems.']]},
+
+ {id:'7.9', title:'Overall installation and commissioning planning', box:8, col:COL.pl,
+  obj:[['7.9.1.1','Plan a controlled installation of the E/E/PE safety-related systems.'],
+       ['7.9.1.2','Plan a controlled commissioning of the E/E/PE safety-related systems.']],
+  req:[['7.9.2.1','The installation plan covers:',['the schedule','who is responsible for each part','the procedures','the integration sequence','readiness and completion criteria','how failures and incompatibilities are resolved']],
+       ['7.9.2.2','The commissioning plan covers:',['the schedule','who is responsible for each part','the procedures','the link to the installation steps','the link to validation']],
+       ['7.9.2.3','Document the installation and commissioning planning.']]},
+
+ {id:'7.10', title:'E/E/PE system safety requirements specification', box:9, col:COL.re,
+  lead:'Define the E/E/PE system safety functions requirements and safety integrity requirements.',
+  req:[['7.10.2.1','Derive the specification from the 7.6 allocation plus relevant application information, and make it available to the system developer.'],
+       ['7.10.2.2','It contains the safety functions and their SILs, stated independently of the equipment so that it can be verified against 7.5 and 7.6.'],
+       ['7.10.2.3','Make it available to the developer of the E/E/PE safety-related system.'],
+       ['7.10.2.4','Write it so that it is:',['clear, precise, unambiguous, verifiable, testable, maintainable and feasible','understandable by everyone who uses it throughout the lifecycle','expressed in natural or formal language, logic, sequence or cause-and-effect diagrams, with each function defined individually']],
+       ['7.10.2.5','It contains the safety functions requirements (7.10.2.6) and the safety integrity requirements (7.10.2.7).'],
+       ['7.10.2.6','Safety functions requirements:',['(a) each function: enough detail for design, how the safe state is reached or held, whether continuous control is needed and for how long, and which demand mode applies','(b) response time','(c) system and operator interfaces','(d) all functional-safety information that affects the design','(e) interfaces with other systems inside or outside the EUC','(f) all EUC modes of operation','(g) all required behaviours, including behaviour and response on failure, such as alarms or automatic shutdown']],
+       ['7.10.2.7','Safety integrity requirements:',['(a) the SIL of each function and, where needed, its target failure measure value','(b) the mode of operation','(c) duty cycle and lifetime','(d) provisions that allow proof testing of the hardware','(e) environmental extremes across manufacture, storage, transport, test, installation, commissioning and O&M','(f) electromagnetic immunity limits (see IEC/TS 61000-1-2)','(g) limiting and constraint conditions arising from common cause failures (7.6.2.7)']]]},
+
+ {id:'7.11', title:'E/E/PE safety-related systems — realisation', box:10, col:COL.re,
+  lead:'Create E/E/PE safety-related systems that conform to the E/E/PE system safety requirements specification. Covers Box 10 and Boxes 10.1 to 10.6 of Figures 3 and 4.',
+  req:[['7.11.2','The requirements are in IEC 61508-2 (hardware and system) and IEC 61508-3 (software).']]},
+
+ {id:'7.12', title:'Other risk reduction measures — specification and realisation', box:11, col:COL.oth,
+  lead:'Create other risk reduction measures that meet the safety functions and integrity requirements allocated to them.',
+  req:[['7.12.2','Not covered by this standard. Examples are hydraulic or pneumatic systems and physical measures such as a drain system, fire wall or bund. They appear in the lifecycle so that E/E/PE risk reduction is judged alongside them.']]},
+
+ {id:'7.13', title:'Overall installation and commissioning', box:12, col:COL.op,
+  obj:[['7.13.1.1','Install the E/E/PE safety-related systems.'],['7.13.1.2','Commission the E/E/PE safety-related systems.']],
+  req:[['7.13.2.1','Install according to the installation plan (7.9).'],
+       ['7.13.2.2','Installation records include:',['the installation activities','how failures and incompatibilities were resolved']],
+       ['7.13.2.3','Commission according to the commissioning plan.'],
+       ['7.13.2.4','Commissioning records include:',['the commissioning activities','references to failure reports','how failures and incompatibilities were resolved']]]},
+
+ {id:'7.14', title:'Overall safety validation', box:13, col:COL.op,
+  lead:'Validate that the E/E/PE safety-related systems meet the overall safety functions and integrity requirements, taking account of the 7.6 allocation.',
+  req:[['7.14.2.1','Validate according to the overall safety validation plan (7.8).'],
+       ['7.14.2.2','Calibrate quantitative measuring equipment against a specification traceable to a national standard or the vendor specification.'],
+       ['7.14.2.3','Validation records include:',['the activities, in chronological order','the version of the overall safety requirements specification used','the safety function validated, and whether by test or analysis','tools and equipment used, with calibration data','the results','configuration of the item under test, the procedures and the test environment','discrepancies between expected and actual results']],
+       ['7.14.2.4','For each discrepancy, document the analysis and the decision: continue, or raise a change request and return to an earlier validation step.']]},
+
+ {id:'7.15', title:'Overall operation, maintenance and repair', box:14, col:COL.op,
+  obj:[['7.15.1.1','Keep the functional safety of the E/E/PE safety-related systems at the specified level.'],
+       ['7.15.1.2','Specify the technical O&M and repair requirements and hand them to the people responsible for future operation and maintenance.']],
+  req:[['7.15.2.1','Implement the O&M plan (7.7) and the operation, maintenance and repair procedures.'],
+       ['7.15.2.2','Implementation includes starting:',['use of the procedures','the maintenance schedules','document maintenance','periodic functional safety audits (see 6.2.7)','records of modifications made to the systems']],
+       ['7.15.2.3','Keep chronological O&M records containing:',['the results of functional safety audits and tests','the time and cause of each demand, how the systems performed, and faults found during routine maintenance','modifications to the EUC, the EUC control system and the safety systems']],
+       ['7.15.2.4','The exact record requirements depend on the product or application and may be set by sector standards.']]}
+];
+
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function reqHTML(r){
+  const [id,txt,list,opt]=r;
+  let h=`<div class="req"><div class="id">${id}</div><div><div>${esc(txt)}</div>`;
+  if(list) h+=`<ul>${list.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  if(opt&&opt.full) h+=`<div class="full">${esc(opt.full)}</div>`;
+  return h+`</div></div>`;
+}
+function group(label,arr,open){
+  return `<details class="group"${open?' open':''}><summary><span class="chev">▶</span>${label}<span class="cnt">${arr.length} item${arr.length>1?'s':''}</span></summary><div class="items">${arr.map(reqHTML).join('')}</div></details>`;
+}
+function allocExtra(){
+  return `<details class="group"><summary><span class="chev">▶</span>Figure 6 · Tables 2 &amp; 3<span class="cnt">SIL targets</span></summary><div class="items">
+  <div class="req"><div class="id">Fig. 6</div><div>Allocation approach, top to bottom:
+    <div class="flow"><span>Each safety function + integrity requirement</span>→<span>Other risk reduction measures #1 / #2</span><span>E/E/PE safety-related systems #1 / #2</span>→<span>Necessary risk reduction</span>→<span>SIL per system</span>→<span>Design requirements (7.10)</span></div>
+    One function may be shared across more than one safety-related system.</div></div>
+  <div class="req"><div class="id">Table 2</div><div>Low demand mode — average probability of dangerous failure on demand (PFDavg)
+    <div class="tbl"><table><tr><th>SIL</th><th>PFDavg</th></tr>
+    <tr><td>4</td><td>≥ 10⁻⁵ to &lt; 10⁻⁴</td></tr><tr><td>3</td><td>≥ 10⁻⁴ to &lt; 10⁻³</td></tr>
+    <tr><td>2</td><td>≥ 10⁻³ to &lt; 10⁻²</td></tr><tr><td>1</td><td>≥ 10⁻² to &lt; 10⁻¹</td></tr></table></div></div></div>
+  <div class="req"><div class="id">Table 3</div><div>High demand or continuous mode — average frequency of dangerous failure (PFH, per hour)
+    <div class="tbl"><table><tr><th>SIL</th><th>PFH [h⁻¹]</th></tr>
+    <tr><td>4</td><td>≥ 10⁻⁹ to &lt; 10⁻⁸</td></tr><tr><td>3</td><td>≥ 10⁻⁸ to &lt; 10⁻⁷</td></tr>
+    <tr><td>2</td><td>≥ 10⁻⁷ to &lt; 10⁻⁶</td></tr><tr><td>1</td><td>≥ 10⁻⁶ to &lt; 10⁻⁵</td></tr></table></div></div></div>
+  </div></details>`;
+}
+const list=document.getElementById('list');
+list.innerHTML=CLAUSES.map(c=>{
+  const anchor=c.box?`box-${c.box}`:'general';
+  let b=`<details class="clause" id="${anchor}" style="--c:${c.col}"><summary><span class="chev">▶</span><span class="num">${c.id}</span><span class="ttl">${esc(c.title)}</span></summary><div class="body">`;
+  if(c.lead) b+=`<p class="lead"><b>Objective:</b> ${esc(c.lead)}</p>`;
+  if(c.obj) b+=group('Objectives',c.obj,true);
+  if(c.req) b+=group('Requirements',c.req,true);
+  if(c.extra==='alloc') b+=allocExtra();
+  return b+`</div></details>`;
+}).join('');
+
+/* open the clause named in the URL, e.g. IEC61508-1_Clause7.html#box-3 */
+function openHash(){const t=location.hash&&document.getElementById(location.hash.slice(1));if(t&&t.tagName==='DETAILS'){t.open=true;t.scrollIntoView({block:'start'});}}
+openHash();window.addEventListener('hashchange',openHash);
+
+const all=()=>document.querySelectorAll('#list details');
+document.getElementById('expandAll').onclick=()=>all().forEach(d=>d.open=true);
+document.getElementById('collapseAll').onclick=()=>document.querySelectorAll('#list .clause').forEach(d=>d.open=false);
+
+/* search: filter requirement rows and clauses, open matches */
+const q=document.getElementById('q');
+q.addEventListener('input',()=>{
+  const term=q.value.trim().toLowerCase();
+  document.querySelectorAll('mark').forEach(m=>m.replaceWith(m.textContent));
+  document.querySelectorAll('.clause').forEach(c=>{
+    const rows=c.querySelectorAll('.req');let any=false;
+    const head=c.querySelector('summary').textContent.toLowerCase().includes(term);
+    rows.forEach(r=>{const hit=!term||head||r.textContent.toLowerCase().includes(term);r.classList.toggle('hidden',!hit);if(hit&&term)any=true;});
+    const show=!term||head||any;
+    c.classList.toggle('hidden',!show);
+    if(term&&show){c.open=true;c.querySelectorAll('details').forEach(d=>d.open=true);}
+  });
+});
+</script>
+</body>
+</html>

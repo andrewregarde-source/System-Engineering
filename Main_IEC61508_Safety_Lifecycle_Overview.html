@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IEC 61508 Safety Lifecycle Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#0a0e16;--panel:#111723;--line:#1f2937;--text:#e6edf3;--muted:#8b98a9;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1500px;margin:0 auto;padding:32px 20px 40px}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
+h1{margin:0;font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.02em}
+.sub{margin:6px 0 0;color:var(--muted);font-size:14px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow-x:auto}
+svg{display:block;width:100%;min-width:1150px;height:auto}
+svg a{cursor:pointer}
+svg a .bx{transition:fill-opacity .15s,stroke-opacity .15s}
+svg a:hover .bx,svg a:focus .bx{fill-opacity:.28;stroke-opacity:1}
+svg a:focus{outline:none}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.note{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:13.5px;line-height:1.55;color:#cbd5e1}
+.note b{display:block;color:var(--text);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <h1>IEC 61508 Safety Lifecycle</h1>
+      <p class="sub">Overall safety lifecycle (Fig. 2) with Box 10 realisation expanded into the E/E/PE system (Fig. 3) and software (Fig. 4) safety lifecycles, related as in Fig. 5.</p>
+    </div>
+    <div class="legend">
+      <span><i style="background:#5aa9ff"></i>Analysis</span>
+      <span><i style="background:#4ade80"></i>Overall planning</span>
+      <span><i style="background:#fbbf24"></i>Realisation / E/E/PE system</span>
+      <span><i style="background:#2dd4bf"></i>Software</span>
+      <span><i style="background:#a78bfa"></i>Installation, operation &amp; disposal</span>
+    </div>
+  </div>
+  <div class="card"><svg id="d" viewBox="0 0 1690 1160" xmlns="http://www.w3.org/2000/svg" font-family="Inter,system-ui,sans-serif"></svg></div>
+
+  <div class="notes">
+    <div class="note"><b>Applies to all phases</b>Verification, management of functional safety and functional safety assessment are not drawn, but they are relevant to every overall, E/E/PE system and software lifecycle phase.</div>
+    <div class="note"><b>Box 11</b>Other risk reduction measures sit outside the scope of IEC 61508.</div>
+    <div class="note"><b>Box 10 and the other parts</b>IEC 61508-2 (hardware) and IEC 61508-3 (software) cover Box 10, and also the programmable electronic aspects of Boxes 13, 14 and 15 where relevant.</div>
+    <div class="note"><b>One lifecycle per system</b>Each E/E/PE safety-related system has its own E/E/PE system safety lifecycle; its software lifecycle interacts with it in both directions.</div>
+    <div class="note"><b>Subsequent phases</b>The complete E/E/PE system and software lifecycles also contain system-specific instances of Boxes 12 to 16; only the realisation phases are expanded here.</div>
+    <div class="note"><b>Operation &amp; modification data</b>Technical requirements for operation, maintenance, repair, modification, retrofit and decommissioning come from the supplier of the E/E/PE safety-related system.</div>
+    <div class="note"><b>Objectives per phase</b>Table 1 (clause 7.1.2) gives each phase's objectives, scope, requirement subclause, required inputs and outputs — a good target for the step hyperlinks.</div>
+  </div>
+</div>
+<script>
+/* =========================================================
+   ADD YOUR HYPERLINKS HERE — one URL per step. Leave '#' until ready.
+   '1'..'16'   = overall safety lifecycle (Figure 2)
+   'S10.x'     = E/E/PE system safety lifecycle (Figure 3)
+   'W10.x'     = software safety lifecycle (Figure 4)
+   ========================================================= */
+const LINKS = {
+  '1':'System_Architecture.html',  '2':'#',  '3':'#',  '4':'#',  '5':'#',  '6':'#',  '7':'#',  '8':'#',
+  '9':'#',  '10':'#', '11':'#', '12':'#', '13':'#', '14':'#', '15':'#', '16':'#',
+  'S10.1':'#', 'S10.2':'#', 'S10.3':'#', 'S10.4':'#', 'S10.5':'#', 'S10.6':'#',
+  'W10.1':'#', 'W10.2':'#', 'W10.3':'#', 'W10.4':'#', 'W10.5':'#', 'W10.6':'#'
+};
+const OPEN_IN_NEW_TAB = false;
+
+const C={an:'#5aa9ff',pl:'#4ade80',re:'#fbbf24',sw:'#2dd4bf',op:'#a78bfa',n:'#8b98a9',wire:'#5b6b80',text:'#e6edf3',muted:'#8b98a9',bg:'#0a0e16'};
+let out=`<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9z" fill="${C.wire}"/></marker>
+<marker id="ay" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9z" fill="${C.re}"/></marker></defs>`;
+const esc=s=>s.replace(/&(?!amp;)/g,'&amp;');
+function wire(d,o={}){out+=`<path d="${d}" fill="none" stroke="${o.col||C.wire}" stroke-width="${o.w||1.6}" stroke-linejoin="round" ${o.dash?'stroke-dasharray="5 5"':''} marker-end="url(#${o.m||'a'})"/>`;}
+/* lines: [text, style]: default bold, 'i' italic, 'L' large, 's' small muted */
+function step(key,label,x,y,w,h,c,lines,o={}){
+  const href=LINKS[key]||'#', tgt=OPEN_IN_NEW_TAB&&href!=='#'?' target="_blank" rel="noopener"':'';
+  let g=`<a href="${href}"${tgt} aria-label="${label}: ${esc(lines.map(l=>l[0]).join(' '))}">`;
+  g+=`<rect class="bx" x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.small?10:12}" fill="${c}" fill-opacity="${o.fo??.12}" stroke="${c}" stroke-opacity=".7" stroke-width="1.2" ${o.dash?'stroke-dasharray="5 5"':''}/>`;
+  let cx;
+  if(o.top){
+    g+=`<rect x="${x+w/2-15}" y="${y+10}" width="30" height="24" rx="7" fill="${c}"/>`;
+    g+=`<text x="${x+w/2}" y="${y+27}" text-anchor="middle" fill="${C.bg}" font-size="14" font-weight="700">${label}</text>`;
+    cx=x+w/2;
+  } else {
+    const bw=o.bw||44;
+    g+=`<rect x="${x+6}" y="${y+6}" width="${bw-10}" height="${h-12}" rx="7" fill="${c}" ${o.dash?'fill-opacity=".35"':''}/>`;
+    g+=`<text x="${x+6+(bw-10)/2}" y="${y+h/2+(o.small?4:6)}" text-anchor="middle" fill="${o.dash?C.text:C.bg}" font-size="${o.small?10.5:16}" font-weight="700">${label}</text>`;
+    cx=x+bw+(w-bw)/2-2;
+  }
+  const lh=l=>l[1]==='L'?30:l[1]==='s'?(o.small?12:16):(o.small?13.5:18);
+  const total=lines.reduce((t,l)=>t+lh(l),0);
+  let ty=(o.top?y+36+(h-36)/2:y+h/2)-total/2+(o.small?10:13);
+  lines.forEach(l=>{
+    const st=l[1]||'b'; if(st==='L') ty+=6;
+    const fs=st==='L'?17:st==='s'?(o.small?10:12):(o.fs||14), fw=st==='s'?400:600, fc=st==='s'?C.muted:C.text;
+    g+=`<text x="${cx}" y="${ty}" text-anchor="middle" fill="${fc}" font-size="${fs}" font-weight="${fw}" ${st==='i'?'font-style="italic"':''}>${esc(l[0])}</text>`;
+    ty+=lh(l);
+  });
+  out+=g+'</a>';
+}
+function chip(cx,y,w,txt){out+=`<rect x="${cx-w/2}" y="${y}" width="${w}" height="24" rx="12" fill="${C.bg}" stroke="#334155"/><text x="${cx}" y="${y+16}" text-anchor="middle" fill="${C.muted}" font-size="11.5" font-weight="600">${txt}</text>`;}
+
+/* ================= OVERALL SAFETY LIFECYCLE (Figure 2) ================= */
+const X=720,W=300,H=60,MX=X+W/2; /* centre x = 870 */
+const Y={1:40,2:130,3:220,4:310,5:400,9:510,10:610,12:760,13:860,14:960,16:1060};
+[[1,2],[2,3],[3,4],[4,5]].forEach(([a,b])=>wire(`M${MX} ${Y[a]+H} V${Y[b]-2}`));
+wire(`M${MX} ${Y[5]+H} V${Y[9]-2}`);           /* 5 -> 9 */
+wire(`M${MX} 486 H213 V508`);                   /* 5 -> overall planning */
+wire(`M555 486 V508`,{dash:1});                 /* 5 -> 11 */
+wire(`M${MX} 574 V${Y[10]-2}`);                 /* 9 -> 10 */
+wire(`M${MX} 720 V${Y[12]-2}`);                 /* 10 -> 12 */
+wire(`M555 640 V775 H718`,{dash:1});            /* 11 -> 12 */
+wire(`M331 690 V805 H718`);                     /* 8 -> 12 */
+wire(`M${MX} 820 V${Y[13]-2}`);                 /* 12 -> 13 */
+wire(`M213 690 V890 H718`);                     /* 7 -> 13 */
+wire(`M${MX} 920 V${Y[14]-2}`);                 /* 13 -> 14 */
+wire(`M95 690 V990 H718`);                      /* 6 -> 14 */
+wire(`M1020 990 H1068`);                        /* 14 -> 15 */
+wire(`M1330 990 H1398`);                        /* 15 -> back */
+wire(`M${MX} 1020 V${Y[16]-2}`);                /* 14 -> 16 */
+wire(`M1020 665 H1058`,{col:C.re,w:2.2,m:'ay'});/* Box 10 expands into realisation panel */
+
+out+=`<rect x="30" y="510" width="366" height="180" rx="14" fill="${C.pl}" fill-opacity=".04" stroke="${C.pl}" stroke-opacity=".35"/>`;
+out+=`<text x="213" y="535" text-anchor="middle" fill="${C.text}" font-size="14" font-weight="600" letter-spacing=".04em">OVERALL PLANNING</text>`;
+out+=`<text x="870" y="24" text-anchor="middle" fill="${C.muted}" font-size="12" font-weight="600" letter-spacing=".12em">OVERALL SAFETY LIFECYCLE · FIGURE 2</text>`;
+
+step('1','1',X,Y[1],W,H,C.an,[['Concept']]);
+step('2','2',X,Y[2],W,H,C.an,[['Overall scope definition']]);
+step('3','3',X,Y[3],W,H,C.an,[['Hazard and risk analysis']]);
+step('4','4',X,Y[4],W,H,C.an,[['Overall safety requirements']]);
+step('5','5',X,Y[5],W,H,C.an,[['Overall safety'],['requirements allocation']]);
+step('6','6',40,550,110,130,C.pl,[['Overall'],['operation and'],['maintenance'],['planning']],{top:1,fs:13});
+step('7','7',158,550,110,130,C.pl,[['Overall'],['safety'],['validation'],['planning']],{top:1,fs:13});
+step('8','8',276,550,110,130,C.pl,[['Overall'],['installation and'],['commissioning'],['planning']],{top:1,fs:13});
+step('11','11',420,510,270,130,C.n,[['Other risk','i'],['reduction measures','i'],['Specification and'],['Realisation']],{dash:1,fo:.06});
+step('9','9',X,Y[9],W,64,C.re,[['E/E/PE system safety'],['requirements specification']]);
+step('10','10',X,Y[10],W,110,C.re,[['E/E/PE','i'],['safety-related systems','i'],['Realisation','L'],['(see E/E/PE system safety lifecycle)','s']],{fo:.2});
+step('12','12',X,Y[12],W,H,C.op,[['Overall installation and'],['commissioning']]);
+step('13','13',X,Y[13],W,H,C.op,[['Overall safety validation']]);
+step('14','14',X,Y[14],W,H,C.op,[['Overall operation,'],['maintenance and repair']]);
+step('15','15',1070,960,260,H,C.op,[['Overall modification'],['and retrofit']]);
+step('16','16',X,Y[16],W,H,C.op,[['Decommissioning or disposal']]);
+out+=`<rect x="1400" y="960" width="250" height="60" rx="12" fill="none" stroke="${C.n}" stroke-opacity=".6" stroke-dasharray="5 5"/>`;
+out+=`<text x="1525" y="985" text-anchor="middle" fill="${C.text}" font-size="13" font-weight="600" font-style="italic">Back to appropriate overall</text>`;
+out+=`<text x="1525" y="1003" text-anchor="middle" fill="${C.text}" font-size="13" font-weight="600" font-style="italic">safety lifecycle phase</text>`;
+
+/* ================= BOX 10 REALISATION PANEL (Figures 3, 4, 5) ================= */
+out+=`<rect x="1060" y="10" width="605" height="935" rx="18" fill="${C.re}" fill-opacity=".03" stroke="${C.re}" stroke-opacity=".45" stroke-dasharray="6 5"/>`;
+out+=`<text x="1082" y="36" fill="${C.text}" font-size="14" font-weight="700" letter-spacing=".04em">BOX 10 · REALISATION</text>`;
+out+=`<text x="1643" y="36" text-anchor="end" fill="${C.muted}" font-size="12">Relationship per Figure 5</text>`;
+
+function lifecycle(y0,c,prefix,title,note,t){
+  out+=`<rect x="1070" y="${y0}" width="585" height="420" rx="14" fill="${c}" fill-opacity=".04" stroke="${c}" stroke-opacity=".3"/>`;
+  out+=`<text x="1088" y="${y0+24}" fill="${C.text}" font-size="14" font-weight="600">${title}</text>`;
+  out+=`<text x="1088" y="${y0+41}" fill="${C.muted}" font-size="11.5" font-style="italic">${note}</text>`;
+  const o=v=>y0+v;
+  /* wires */
+  wire(`M1360 ${o(100)} V${o(128)}`);
+  wire(`M1360 ${o(116)} H1165 V${o(128)}`);
+  wire(`M1360 ${o(202)} V${o(218)}`);
+  wire(`M1458 ${o(166)} H1557 V${o(218)}`);
+  wire(`M1165 ${o(202)} V${o(308)} H1310 V${o(318)}`);
+  wire(`M1360 ${o(266)} V${o(318)}`);
+  wire(`M1500 ${o(300)} V${o(308)} H1410 V${o(318)}`);
+  wire(`M1360 ${o(370)} V${o(384)}`);
+  wire(`M1590 ${o(300)} V${o(384)}`);
+  const sm={small:1,bw:38,fs:11};
+  step(prefix+'10.1','10.1',1240,o(52),240,48,c,t[0],sm);
+  step(prefix+'10.2','10.2',1080,o(130),170,72,c,t[1],sm);
+  step(prefix+'10.3','10.3',1262,o(130),196,72,c,t[2],sm);
+  step(prefix+'10.4','10.4',1270,o(220),180,46,c,t[3],sm);
+  step(prefix+'10.5','10.5',1470,o(220),175,80,c,t[4],sm);
+  step(prefix+'10.6','10.6',1270,o(320),180,50,c,t[5],sm);
+  chip(1360,o(386),130,'To Box 12');
+  chip(1590,o(386),110,'To Box 14');
+}
+lifecycle(60,C.re,'S','E/E/PE system safety lifecycle · Figure 3','One E/E/PE safety lifecycle for each E/E/PE safety-related system',[
+  [['E/E/PE system design'],['requirements specification']],
+  [['E/E/PE system'],['safety validation'],['planning']],
+  [['E/E/PE system design &'],['development including'],['ASICs & software'],['(see Figure 3 of IEC 61508-2','s'],['& also IEC 61508-3)','s']],
+  [['E/E/PE system'],['integration']],
+  [['E/E/PE system'],['installation,'],['commissioning,'],['operation &'],['maintenance'],['procedures']],
+  [['E/E/PE system'],['safety validation']]
+]);
+/* two-way relationship between the lifecycles (Figure 5) */
+wire('M1330 482 V508',{col:C.re,w:2,m:'ay'});
+wire('M1390 508 V482',{col:C.sw,w:2});
+lifecycle(510,C.sw,'W','Software safety lifecycle · Figure 4','Works hand in hand with the E/E/PE system safety lifecycle',[
+  [['Software safety'],['requirements specification']],
+  [['Validation plan for'],['software aspects of'],['system safety']],
+  [['Software design'],['&'],['development']],
+  [['PE integration'],['(hardware & software)']],
+  [['Software operation'],['&'],['maintenance'],['procedures']],
+  [['Software aspects of'],['system safety'],['validation']]
+]);
+document.getElementById('d').innerHTML=out;
+</script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Overall Safety Lifecycle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#0a0e16;--panel:#111723;--line:#1f2937;--text:#e6edf3;--muted:#8b98a9;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 20px 40px}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
+h1{margin:0;font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.02em}
+.sub{margin:6px 0 0;color:var(--muted);font-size:14px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow-x:auto}
+svg{display:block;width:100%;min-width:900px;height:auto}
+svg a{cursor:pointer}
+svg a .bx{transition:fill-opacity .15s,stroke-opacity .15s}
+svg a:hover .bx,svg a:focus .bx{fill-opacity:.28;stroke-opacity:1}
+svg a:focus{outline:none}
+.note{margin:14px 4px 0;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <h1>Overall Safety Lifecycle</h1>
+      <p class="sub">IEC 61508 — phases 1 to 16. Select a step to open its detailed outputs.</p>
+    </div>
+    <div class="legend">
+      <span><i style="background:#5aa9ff"></i>Analysis</span>
+      <span><i style="background:#4ade80"></i>Overall planning</span>
+      <span><i style="background:#fbbf24"></i>Realisation</span>
+      <span><i style="background:#a78bfa"></i>Installation, operation &amp; disposal</span>
+    </div>
+  </div>
+  <div class="card"><svg id="d" viewBox="0 0 1100 1150" xmlns="http://www.w3.org/2000/svg" font-family="Inter,system-ui,sans-serif"></svg></div>
+  <p class="note">Tip: hover a step to see it highlight. Steps link to <code>#</code> until you add your own URLs.</p>
+</div>
+<script>
+/* =========================================================
+   ADD YOUR HYPERLINKS HERE — one URL per step.
+   Leave '#' until the detail page exists.
+   ========================================================= */
+const LINKS = {
+  1:  '#',   /* Concept */
+  2:  '#',   /* Overall scope definition */
+  3:  '#',   /* Hazard and risk analysis */
+  4:  '#',   /* Overall safety requirements */
+  5:  '#',   /* Overall safety requirements allocation */
+  6:  '#',   /* Overall operation and maintenance planning */
+  7:  '#',   /* Overall safety validation planning */
+  8:  '#',   /* Overall installation and commissioning planning */
+  9:  '#',   /* E/E/PE system safety requirements specification */
+  10: '#',   /* E/E/PE safety-related systems — Realisation */
+  11: '#',   /* Other risk reduction measures — Specification and Realisation */
+  12: '#',   /* Overall installation and commissioning */
+  13: '#',   /* Overall safety validation */
+  14: '#',   /* Overall operation, maintenance and repair */
+  15: '#',   /* Overall modification and retrofit */
+  16: '#'    /* Decommissioning or disposal */
+};
+const OPEN_IN_NEW_TAB = false;
+
+const C={an:'#5aa9ff',pl:'#4ade80',re:'#fbbf24',op:'#a78bfa',n:'#8b98a9',wire:'#5b6b80',text:'#e6edf3',muted:'#8b98a9',bg:'#0a0e16'};
+let out=`<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9z" fill="${C.wire}"/></marker></defs>`;
+const esc=s=>s.replace(/&(?!amp;)/g,'&amp;');
+function wire(d,o={}){out+=`<path d="${d}" fill="none" stroke="${C.wire}" stroke-width="1.6" stroke-linejoin="round" ${o.dash?'stroke-dasharray="5 5"':''} marker-end="url(#a)"/>`;}
+/* lines: array of [text, style] where style: 'b' bold, 'i' italic, 's' small muted, 'L' large bold */
+function step(n,x,y,w,h,c,lines,o={}){
+  const href=LINKS[n]||'#', tgt=OPEN_IN_NEW_TAB&&href!=='#'?' target="_blank" rel="noopener"':'';
+  let g=`<a href="${href}"${tgt} aria-label="Step ${n}: ${lines.map(l=>l[0]).join(' ')}">`;
+  g+=`<rect class="bx" x="${x}" y="${y}" width="${w}" height="${h}" rx="12" fill="${c}" fill-opacity="${o.fo??.12}" stroke="${c}" stroke-opacity=".7" stroke-width="1.2" ${o.dash?'stroke-dasharray="5 5"':''}/>`;
+  const bw=o.top?0:44;
+  if(o.top){ /* number chip at top for narrow planning boxes */
+    g+=`<rect x="${x+w/2-15}" y="${y+10}" width="30" height="24" rx="7" fill="${c}"/>`;
+    g+=`<text x="${x+w/2}" y="${y+27}" text-anchor="middle" fill="${C.bg}" font-size="14" font-weight="700">${n}</text>`;
+  } else {
+    g+=`<rect x="${x+8}" y="${y+8}" width="${bw-12}" height="${h-16}" rx="8" fill="${c}" ${o.dash?'fill-opacity=".35"':''}/>`;
+    g+=`<text x="${x+8+(bw-12)/2}" y="${y+h/2+6}" text-anchor="middle" fill="${o.dash?C.text:C.bg}" font-size="16" font-weight="700">${n}</text>`;
+  }
+  const cx=o.top?x+w/2:x+bw+(w-bw)/2;
+  const lh=l=>l[1]==='L'?30:l[1]==='s'?16:18;
+  const total=lines.reduce((t,l)=>t+lh(l),0);
+  let ty=(o.top?y+36+(h-36)/2:y+h/2)-total/2+13;
+  lines.forEach(l=>{
+    const st=l[1]||'b';
+    if(st==='L') ty+=6;
+    const fs=st==='L'?17:st==='s'?12:(o.fs||14), fw=st==='s'?400:600, fc=st==='s'?C.muted:C.text;
+    g+=`<text x="${cx}" y="${ty}" text-anchor="middle" fill="${fc}" font-size="${fs}" font-weight="${fw}" ${st==='i'?'font-style="italic"':''}>${esc(l[0])}</text>`;
+    ty+=lh(l);
+  });
+  out+=g+'</a>';
+}
+const X=410,W=300,H=60,MX=X+W/2; /* main column, centre x = 560 */
+const Y={1:40,2:130,3:220,4:310,5:400,9:510,10:610,12:760,13:860,14:960,16:1060};
+/* ---- wires (drawn first) ---- */
+[[1,2],[2,3],[3,4],[4,5]].forEach(([a,b])=>wire(`M${MX} ${Y[a]+H} V${Y[b]-2}`));
+wire(`M${MX} ${Y[5]+H} V${Y[9]-2}`);                  /* 5 -> 9 */
+wire(`M${MX} 486 H213 V508`);                          /* 5 -> overall planning */
+wire(`M${MX} 486 H930 V508`,{dash:1});                 /* 5 -> 11 */
+wire(`M${MX} ${Y[9]+64} V${Y[10]-2}`);                 /* 9 -> 10 */
+wire(`M${MX} ${Y[10]+110} V${Y[12]-2}`);               /* 10 -> 12 */
+wire(`M331 690 V790 H408`);                            /* 8 -> 12 */
+wire(`M930 640 V790 H712`,{dash:1});                   /* 11 -> 12 */
+wire(`M${MX} ${Y[12]+H} V${Y[13]-2}`);                 /* 12 -> 13 */
+wire(`M213 690 V890 H408`);                            /* 7 -> 13 */
+wire(`M${MX} ${Y[13]+H} V${Y[14]-2}`);                 /* 13 -> 14 */
+wire(`M95 690 V990 H408`);                            /* 6 -> 14 */
+wire(`M710 990 H778`);                                 /* 14 -> 15 */
+wire(`M910 960 V918`);                                 /* 15 -> back to phase */
+wire(`M${MX} ${Y[14]+H} V${Y[16]-2}`);                 /* 14 -> 16 */
+/* ---- overall planning container ---- */
+out+=`<rect x="30" y="510" width="366" height="180" rx="14" fill="${C.pl}" fill-opacity=".04" stroke="${C.pl}" stroke-opacity=".35"/>`;
+out+=`<text x="213" y="535" text-anchor="middle" fill="${C.text}" font-size="14" font-weight="600" letter-spacing=".04em">OVERALL PLANNING</text>`;
+/* ---- steps ---- */
+step(1,X,Y[1],W,H,C.an,[['Concept']]);
+step(2,X,Y[2],W,H,C.an,[['Overall scope definition']]);
+step(3,X,Y[3],W,H,C.an,[['Hazard and risk analysis']]);
+step(4,X,Y[4],W,H,C.an,[['Overall safety requirements']]);
+step(5,X,Y[5],W,H,C.an,[['Overall safety'],['requirements allocation']]);
+step(6,40,550,110,130,C.pl,[['Overall'],['operation and'],['maintenance'],['planning']],{top:1,fs:13});
+step(7,158,550,110,130,C.pl,[['Overall'],['safety'],['validation'],['planning']],{top:1,fs:13});
+step(8,276,550,110,130,C.pl,[['Overall'],['installation and'],['commissioning'],['planning']],{top:1,fs:13});
+step(9,X,Y[9],W,64,C.re,[['E/E/PE system safety'],['requirements specification']]);
+step(10,X,Y[10],W,110,C.re,[['E/E/PE','i'],['safety-related systems','i'],['Realisation','L'],['(see E/E/PE system safety lifecycle)','s']]);
+step(11,780,510,300,130,C.n,[['Other risk','i'],['reduction measures','i'],['Specification and','b'],['Realisation','b']],{dash:1,fo:.06});
+step(12,X,Y[12],W,H,C.op,[['Overall installation and'],['commissioning']]);
+step(13,X,Y[13],W,H,C.op,[['Overall safety validation']]);
+step(14,X,Y[14],W,H,C.op,[['Overall operation,'],['maintenance and repair']]);
+step(15,780,960,260,H,C.op,[['Overall modification'],['and retrofit']]);
+step(16,X,Y[16],W,H,C.op,[['Decommissioning or disposal']]);
+/* back-to label (not a step) */
+out+=`<rect x="780" y="860" width="260" height="56" rx="12" fill="none" stroke="${C.n}" stroke-opacity=".6" stroke-dasharray="5 5"/>`;
+out+=`<text x="910" y="883" text-anchor="middle" fill="${C.text}" font-size="13" font-weight="600" font-style="italic">Back to appropriate overall</text>`;
+out+=`<text x="910" y="901" text-anchor="middle" fill="${C.text}" font-size="13" font-weight="600" font-style="italic">safety lifecycle phase</text>`;
+document.getElementById('d').innerHTML=out;
+</script>
+</body>
+</html>

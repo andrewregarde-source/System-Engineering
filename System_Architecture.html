@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>System Architecture — MP2500</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#0a0e16;--panel:#111723;--line:#1f2937;--wire:#3b4a5e;--text:#e6edf3;--muted:#8b98a9;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1400px;margin:0 auto;padding:32px 20px 40px}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
+h1{margin:0;font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.02em}
+.sub{margin:6px 0 0;color:var(--muted);font-size:14px}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.tools button{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer}
+.tools button:hover,.home:hover{border-color:#334155;background:#162030}
+.home{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text);text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-bottom:18px}
+.home svg{width:16px;height:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow-x:auto;padding:28px 24px}
+
+/* ---------- horizontal tree ---------- */
+.tree,.tree ul{list-style:none;margin:0;padding:0}
+.tree ul{display:flex;flex-direction:column;justify-content:center;position:relative;padding-left:28px}
+.tree ul::before{content:"";position:absolute;left:0;top:50%;width:28px;border-top:1.5px solid var(--wire)}
+.tree li{display:flex;align-items:center;position:relative;padding:4px 0}
+.tree ul>li{padding-left:28px}
+.tree ul>li::before{content:"";position:absolute;left:0;top:50%;width:28px;border-top:1.5px solid var(--wire)}
+.tree ul>li::after{content:"";position:absolute;left:0;top:0;bottom:0;border-left:1.5px solid var(--wire)}
+.tree ul>li:first-child::after{top:50%}
+.tree ul>li:last-child::after{bottom:50%}
+.tree ul>li:only-child::after{display:none}
+.tree li.collapsed>ul{display:none}
+
+.node{display:flex;align-items:center;gap:10px;flex-shrink:0;min-width:0;
+  background:color-mix(in srgb,var(--c) 12%,var(--panel));border:1.2px solid color-mix(in srgb,var(--c) 65%,transparent);
+  border-radius:12px;padding:8px 12px;font:inherit;color:var(--text);text-align:left;position:relative}
+.node::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--c)}
+.node .code{font-size:11.5px;font-weight:700;color:var(--c);font-variant-numeric:tabular-nums;white-space:nowrap}
+.node .name{font-size:13.5px;font-weight:600;line-height:1.35}
+.node .txt{display:flex;flex-direction:column;gap:2px;padding-left:4px}
+.leaf .node{max-width:420px}
+.branch>.node{cursor:pointer;width:300px}
+.branch>.node:hover{background:color-mix(in srgb,var(--c) 22%,var(--panel))}
+.branch>.node:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.toggle{margin-left:auto;display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:var(--c);color:var(--bg);font-size:15px;font-weight:700;line-height:1;flex-shrink:0}
+.count{font-size:11px;color:var(--muted);font-weight:500}
+.root>.node{padding:14px 16px;width:170px}
+.root>.node .name{font-size:18px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" id="homeLink" href="#" title="Back to the overall safety lifecycle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+    Home · IEC 61508 Safety Lifecycle
+  </a>
+  <div class="head">
+    <div>
+      <h1>System Architecture — MP2500</h1>
+      <p class="sub">Click a system to expand or collapse its branch.</p>
+    </div>
+    <div class="tools">
+      <button id="expandAll" type="button">Expand all</button>
+      <button id="collapseAll" type="button">Collapse all</button>
+    </div>
+  </div>
+  <div class="card"><ul class="tree" id="tree"></ul></div>
+</div>
+<script>
+/* =========================================================
+   HOME LINK — the page the Home button returns to.
+   Same folder: just the file name. Other folder: use / and ../
+   ========================================================= */
+const HOME_URL = 'Main_IEC61508_Safety_Lifecycle_Overview.html';
+document.getElementById('homeLink').href = HOME_URL;
+
+const DATA = {code:'1', name:'MP2500', color:'#e6edf3', children:[
+  {code:'1.1', name:'Automation and Control System', color:'#5aa9ff', children:[
+    ['1.1.1','Main Controller(PMS)'],['1.1.2','Site Controller(EMS)'],['1.1.3','Industrial Ethernet Switch'],
+    ['1.1.4','CAN Communication Module'],['1.1.5','RS485 Module(Dehumidifier,Chiller, HVAC, GD)'],['1.1.6','DO module'],['1.1.7','DI module']]},
+  {code:'1.2', name:'Battery Storage System', color:'#4ade80', children:[
+    ['1.2.1','Battery Module Assembly'],['1.2.2','HV Control Box'],['1.2.3','DC box']]},
+  {code:'1.3', name:'Fire suppresion system', color:'#f87171', children:[
+    ['1.3.1','Smoke Detector'],['1.3.2','Heat Detector'],['1.3.3','Aerosol Agent'],['1.3.4','Gas Detector'],
+    ['1.3.5','Inlet louver / Exhaust Fan'],['1.3.6','Backup Battery'],['1.3.7','Pull Station'],['1.3.8','Alarm'],
+    ['1.3.9','Ventilation Switch'],['1.3.10','FSS Controller'],['1.3.11','Deflagration Panel']]},
+  {code:'1.4', name:'Auxiliary power distribution system', color:'#fbbf24', children:[
+    ['1.4.1','UPS'],['1.4.2','Power supply(Automation and Control System)'],
+    ['1.4.3','MCCB(Control box, Ventilation, FSS, Dehumidifier, Door light, CON)'],
+    ['1.4.4','ELCB(AC400V - Chiller : AC200V - Aux and UPS)'],['1.4.5','SPD(AC400V - Chiller : AC200V - Aux)']]},
+  {code:'1.5', name:'Thermal Management System', color:'#2dd4bf', children:[
+    ['1.5.1','Liquid Cooling Unit'],['1.5.2','Dehumidifier'],['1.5.3','Coolant Circuit'],['1.5.4','HVAC']]},
+  {code:'1.6', name:'Enclosure System', color:'#a78bfa', children:[
+    ['1.6.1','Enclosure Housing'],['1.6.2','Battery Rack Fixation'],['1.6.3','Seal'],['1.6.4','Drainage'],
+    ['1.6.5','Anchor Bolt'],['1.6.6','ISO corner'],['1.6.7','Door'],['1.6.8','Light'],['1.6.9','LCU fixation'],
+    ['1.6.10','Control Box Fixation'],['1.6.11','Dehumidifier Fixation'],['1.6.12','HVAC fixation'],
+    ['1.6.13','Ventilation Fixation'],['1.6.14','Rockwool']]},
+  {code:'1.7', name:'Power Conversion System', color:'#fb923c', children:[
+    ['1.7.1','Power Semiconductor Bridge'],['1.7.2','Gate Drive Circuit'],['1.7.3','DC link Energy Storage'],
+    ['1.7.4','Voltage Measurement Circuit'],['1.7.5','Current Measurement Circuit'],['1.7.6','Converter Controller'],
+    ['1.7.7','Synchronization / Reference Generator'],['1.7.8','PWM / Switching Command Generator'],['1.7.9','Output Filter']]}
+]};
+
+const el=(t,cls,html)=>{const e=document.createElement(t);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;};
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+function build(node,color,isRoot){
+  const li=el('li',isRoot?'branch root':'branch');
+  const c=node.color||color;
+  const btn=el('button','node');btn.type='button';btn.style.setProperty('--c',c);
+  btn.setAttribute('aria-expanded','true');
+  btn.innerHTML=`<span class="txt"><span class="code">${node.code}</span><span class="name">${esc(node.name)}</span><span class="count">${node.children.length} ${node.children[0].children?'systems':'items'}</span></span><span class="toggle" aria-hidden="true">−</span>`;
+  btn.addEventListener('click',()=>setOpen(li,li.classList.contains('collapsed')));
+  li.appendChild(btn);
+  const ul=el('ul');
+  node.children.forEach(ch=>{
+    if(Array.isArray(ch)){
+      const leaf=el('li','leaf');
+      const d=el('div','node');d.style.setProperty('--c',c);
+      d.innerHTML=`<span class="txt"><span class="code">${ch[0]}</span><span class="name">${esc(ch[1])}</span></span>`;
+      leaf.appendChild(d);ul.appendChild(leaf);
+    } else ul.appendChild(build(ch,c,false));
+  });
+  li.appendChild(ul);
+  return li;
+}
+function setOpen(li,open){
+  li.classList.toggle('collapsed',!open);
+  const b=li.querySelector(':scope>.node');
+  b.setAttribute('aria-expanded',String(open));
+  b.querySelector('.toggle').textContent=open?'−':'+';
+}
+const tree=document.getElementById('tree');
+tree.appendChild(build(DATA,DATA.color,true));
+const subs=()=>tree.querySelectorAll('.root>ul>li.branch');
+document.getElementById('expandAll').onclick=()=>{setOpen(tree.querySelector('.root'),true);subs().forEach(li=>setOpen(li,true));};
+document.getElementById('collapseAll').onclick=()=>subs().forEach(li=>setOpen(li,false));
+</script>
+</body>
+</html>
