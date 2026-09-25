@@ -28,10 +28,40 @@ svg a:focus{outline:none}
 .notes{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
 .note{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:13.5px;line-height:1.55;color:#cbd5e1}
 .note b{display:block;color:var(--text);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+
+/* ---------- left panel ---------- */
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh;min-height:100dvh}
+.side{position:sticky;top:0;height:100vh;height:100dvh;overflow:auto;background:#0d131d;border-right:1px solid var(--line);padding:22px 14px;padding-top:calc(22px + env(safe-area-inset-top,0px));padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}
+.side .brand{font-size:13px;font-weight:700;color:var(--muted);padding:0 10px 12px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.side nav ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.side nav ul ul{margin:4px 0 4px 14px;padding-left:10px;border-left:1px solid var(--line)}
+.side a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;color:#cbd5e1;text-decoration:none;font-size:14px;font-weight:600;border:1px solid transparent}
+.side ul ul a{font-size:13px;font-weight:500;padding:7px 10px}
+.side a:hover{background:#162030;color:var(--text)}
+.side a:focus-visible{outline:2px solid #5aa9ff;outline-offset:1px}
+.side a[aria-current="page"]{background:color-mix(in srgb,var(--c) 16%,transparent);border-color:color-mix(in srgb,var(--c) 55%,transparent);color:var(--text)}
+.side a .dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--c)}
+.side a.todo{color:var(--muted)}
+.side a.todo .dot{background:transparent;border:1.5px solid var(--muted)}
+.side a .soon{margin-left:auto;font-size:11px;font-weight:500;color:var(--muted)}
+.menu{display:none;font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;margin-bottom:14px}
+.scrim{display:none}
+@media (max-width:900px){
+  .layout{display:block}
+  .side{position:fixed;left:0;top:0;bottom:0;height:auto;width:min(270px,85vw);z-index:30;transform:translateX(-102%);transition:transform .2s ease}
+  .side.open{transform:none}
+  .menu{display:inline-block}
+  .scrim.open{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:25}
+}
+@media (prefers-reduced-motion:reduce){.side{transition:none}}
 </style>
 </head>
 <body>
+<div class="layout">
+<aside class="side" id="side" aria-label="Files"><div class="brand">My files</div><nav><ul id="nav"></ul></nav></aside>
+<div class="scrim" id="scrim"></div>
 <div class="wrap">
+  <button class="menu" id="menuBtn" type="button" aria-controls="side" aria-expanded="false">☰ Files</button>
   <div class="head">
     <div>
       <h1>IEC 61508 Safety Lifecycle</h1>
@@ -57,6 +87,44 @@ svg a:focus{outline:none}
     <div class="note"><b>Objectives per phase</b>Table 1 (clause 7.1.2) gives each phase's objectives, scope, requirement subclause, required inputs and outputs — a good target for the step hyperlinks.</div>
   </div>
 </div>
+</div>
+<script>
+/* =========================================================
+   LEFT PANEL — EDIT THIS LIST to rename items or add links.
+   label : text shown in the panel
+   href  : file name ('#' = no link yet, shown greyed out)
+           same folder = just the file name; other folder = use / and ../
+   color : optional dot colour
+   children : optional sub-list, same format, e.g.
+     children:[ {label:'System Architecture', href:'System_Architecture.html'} ]
+   To add a new item, copy one line and change label and href.
+   ========================================================= */
+const NAV = [
+  {label:'FuSA',     href:'index.html', color:'#5aa9ff'},
+  {label:'DFMEA',    href:'#',          color:'#4ade80'},
+  {label:'reserve1', href:'#',          color:'#fbbf24'},
+  {label:'reserve2', href:'#',          color:'#a78bfa'},
+];
+const NAV_NEW_TAB = false;   /* true = open panel links in a new tab */
+
+(function(){
+  const here=decodeURIComponent(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  const e=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+  const item=it=>{
+    const href=it.href||'#', todo=href==='#';
+    const cur=!todo&&href.split('/').pop().split('#')[0].toLowerCase()===here;
+    const tgt=NAV_NEW_TAB&&!todo?' target="_blank" rel="noopener"':'';
+    const kids=it.children&&it.children.length?`<ul>${it.children.map(k=>item({color:it.color,...k})).join('')}</ul>`:'';
+    return `<li><a href="${e(href)}"${tgt} class="${todo?'todo':''}" style="--c:${e(it.color||'#8b98a9')}"${cur?' aria-current="page"':''}${todo?' aria-disabled="true" title="No link yet"':''}><span class="dot"></span>${e(it.label)}${todo?'<span class="soon">no link</span>':''}</a>${kids}</li>`;
+  };
+  document.getElementById('nav').innerHTML=NAV.map(item).join('');
+  document.getElementById('nav').addEventListener('click',ev=>{const a=ev.target.closest('a.todo');if(a)ev.preventDefault();});
+  const side=document.getElementById('side'),scrim=document.getElementById('scrim'),btn=document.getElementById('menuBtn');
+  const set=o=>{side.classList.toggle('open',o);scrim.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);};
+  btn.onclick=()=>set(!side.classList.contains('open'));scrim.onclick=()=>set(false);
+  document.addEventListener('keydown',ev=>{if(ev.key==='Escape')set(false);});
+})();
+</script>
 <script>
 /* =========================================================
    ADD YOUR HYPERLINKS HERE — one URL per step. Leave '#' until ready.
