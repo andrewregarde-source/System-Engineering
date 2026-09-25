@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Product / System Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#0a0e16;--panel:#111723;--line:#1f2937;--text:#e6edf3;--muted:#8b98a9;
+  --blue:#5aa9ff;--orange:#fbbf24;--green:#4ade80;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.app-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;border-bottom:1px solid var(--line);background:var(--bg)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:var(--text);color:var(--bg);font-size:12px;font-weight:700}
+.brand-main{font-size:13px;font-weight:700;letter-spacing:.1em}
+.brand-sub{margin-top:3px;color:var(--muted);font-size:12px}
+.header-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.chip{padding:6px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.wrap{max-width:1060px;margin:0 auto;padding:32px 20px 40px}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
+.eyebrow{color:var(--blue);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}
+h1{margin:0;font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.02em}
+.sub{margin:6px 0 0;color:var(--muted);font-size:14px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow-x:auto}
+svg{display:block;width:100%;min-width:780px;height:auto}
+@media (max-width:700px){.header-info{display:none}.app-header{padding:12px 16px}}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="brand">
+    <div class="logo">PX</div>
+    <div><div class="brand-main">PRODUCT ENGINEERING</div><div class="brand-sub">Product / System Development</div></div>
+  </div>
+  <div class="header-info">
+    <span class="chip"><span class="dot"></span>DEVELOPMENT FLOW</span>
+    <span class="chip">APQP / V-MODEL</span>
+    <span class="chip">IEC 61508</span>
+  </div>
+</header>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Engineering Process</div>
+      <h1>Product / System Development</h1>
+      <p class="sub">Product development, system architecture and functional safety lifecycle</p>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--blue)"></i>Product / Quality</span>
+      <span><i style="background:var(--orange)"></i>Functional Safety</span>
+      <span><i style="background:var(--green)"></i>Production / Release</span>
+    </div>
+  </div>
+  <div class="card"><svg id="d" viewBox="0 0 960 1920" xmlns="http://www.w3.org/2000/svg" font-family="Inter,system-ui,sans-serif"></svg></div>
+</div>
+<script>
+const C={b:'#5aa9ff',o:'#fbbf24',g:'#4ade80',n:'#8b98a9',wire:'#5b6b80',text:'#e6edf3',muted:'#8b98a9',bg:'#0a0e16'};
+let out=`<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9z" fill="${C.wire}"/></marker></defs>`;
+function panel(x,y,w,h,c){out+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="16" fill="${c}" fill-opacity=".035" stroke="${c}" stroke-opacity=".14"/>`;}
+function wire(d,o={}){out+=`<path d="${d}" fill="none" stroke="${C.wire}" stroke-width="1.6" stroke-linejoin="round" ${o.dash?'stroke-dasharray="5 5"':''} ${o.noEnd?'':'marker-end="url(#a)"'} ${o.both?'marker-start="url(#a)"':''}/>`;}
+function box(x,y,w,h,c,title,o={}){
+  out+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="12" fill="${c}" fill-opacity="${o.fo??.12}" stroke="${c}" stroke-opacity=".7" stroke-width="1.2" ${o.dash?'stroke-dasharray="5 5"':''}/>`;
+  if(!o.noBar&&h>=40) out+=`<rect x="${x}" y="${y+12}" width="3" height="${h-24}" rx="1.5" fill="${c}"/>`;
+  const lines=title.split('|'),sub=o.sub,n=lines.length+(sub?1:0);
+  let ty=y+h/2-(n-1)*10+5;
+  lines.forEach((l,i)=>out+=`<text x="${x+w/2}" y="${ty+i*20}" text-anchor="middle" fill="${o.tc||C.text}" font-size="${o.fs||14}" font-weight="600">${l}</text>`);
+  if(sub) out+=`<text x="${x+w/2}" y="${ty+lines.length*20+1}" text-anchor="middle" fill="${o.sc||C.muted}" font-size="12.5" font-weight="500">${sub}</text>`;
+}
+/* column panels */
+panel(20,120,560,1780,C.b);
+panel(600,120,340,860,C.o);
+/* ---- wires ---- */
+wire('M530 86 V108 H310 V138');
+wire('M530 108 H770 V138');
+wire('M310 230 V278');            /* header -> customer req */
+wire('M310 330 V368');            /* customer -> system req */
+wire('M310 420 V718');            /* system req -> system architecture */
+wire('M770 230 V278');            /* safety header -> planning */
+wire('M770 330 V358');
+wire('M770 420 V458');
+wire('M770 510 V538');
+wire('M770 590 V618');
+wire('M770 670 V718');            /* SIL -> safety architecture */
+wire('M442 748 H638',{both:1});   /* system <-> safety architecture */
+wire('M770 776 V818');            /* safety arch -> details */
+wire('M310 776 V800 H170 V818');  /* system arch -> components */
+wire('M270 800 V818',{});
+wire('M310 800 H370 V818');
+wire('M370 800 H460 V818',{dash:1});
+wire('M170 860 V898');            /* BSS -> detailed design */
+wire('M170 950 V1408');           /* detailed design spine -> DVP&R */
+wire('M170 982 H318');            /* -> DFMEA */
+wire('M420 1004 V1028');
+wire('M420 1068 V1088');
+wire('M420 1128 V1148');
+wire('M420 1188 V1208');
+wire('M420 1248 V1268');
+wire('M170 1352 H318');           /* -> FTA / FMEDA */
+wire('M170 1466 V1498');
+wire('M170 1548 V1578');
+wire('M170 1628 V1658');
+wire('M170 1708 V1738');
+wire('M170 1788 V1828');
+/* ---- nodes ---- */
+box(350,30,360,56,C.n,'PRODUCT / SYSTEM DEVELOPMENT',{fo:.1,noBar:1,fs:15});
+box(160,140,300,90,C.b,'PRODUCT DEVELOPMENT|/ QUALITY DEVELOPMENT',{sub:'APQP / V-Model',sc:C.b,fo:.16});
+box(620,140,300,90,C.o,'FUNCTIONAL SAFETY|DEVELOPMENT',{sub:'IEC 61508',sc:C.o,fo:.16});
+box(180,280,260,50,C.b,'Customer / Product Req.');
+box(180,370,260,50,C.b,'System Requirements');
+box(640,280,260,50,C.o,'Safety Lifecycle Planning');
+box(640,360,260,60,C.o,'Hazard &amp; Risk Analysis',{sub:'HARA'});
+box(640,460,260,50,C.o,'Safety Functions');
+box(640,540,260,50,C.o,'Safety Requirements');
+box(640,620,260,50,C.o,'SIL Allocation');
+box(180,720,260,56,C.b,'System Architecture',{fs:15,fo:.18});
+box(640,720,260,56,C.o,'Safety Architecture',{fs:15,fo:.18});
+out+=`<rect x="640" y="820" width="260" height="140" rx="12" fill="${C.o}" fill-opacity=".05" stroke="${C.o}" stroke-opacity=".35"/>`;
+box(660,836,220,32,C.o,'Safety mechanisms',{noBar:1,fs:13});
+box(660,874,220,32,C.o,'Diagnostics',{noBar:1,fs:13});
+box(660,912,220,32,C.o,'Safe states',{noBar:1,fs:13});
+box(130,820,80,40,C.b,'BSS',{noBar:1});
+box(230,820,80,40,C.b,'TMS',{noBar:1});
+box(330,820,80,40,C.b,'FSS',{noBar:1});
+box(430,820,60,40,C.n,'...',{noBar:1,dash:1,fo:.05});
+box(40,900,260,50,C.b,'Detailed Design',{fo:.18});
+box(320,960,200,44,C.b,'DFMEA',{fo:.18});
+box(320,1030,200,38,C.b,'Function',{noBar:1,fs:13});
+box(320,1090,200,38,C.b,'Failure Mode',{noBar:1,fs:13});
+box(320,1150,200,38,C.b,'Failure Effect',{noBar:1,fs:13});
+box(320,1210,200,38,C.b,'Failure Cause',{noBar:1,fs:13});
+box(320,1270,200,38,C.b,'PC / DC',{noBar:1,fs:13});
+box(320,1326,200,54,C.b,'FTA / FMEDA',{sub:'(as applicable)'});
+box(40,1410,260,56,C.b,'Design Verification Planning',{sub:'DVP&amp;R'});
+box(40,1500,260,48,C.b,'Component / Subsystem Testing',{fs:13});
+box(40,1580,260,48,C.b,'System Integration Testing');
+box(40,1660,260,48,C.b,'Validation');
+box(40,1740,260,48,C.b,'Safety Validation');
+box(40,1830,260,50,C.g,'Production / Release',{tc:C.g,fo:.14});
+document.getElementById('d').innerHTML=out;
+</script>
+</body>
+</html>

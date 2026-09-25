@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>System engineering process flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#0a0e16;--panel:#111723;--line:#1f2937;--text:#e6edf3;--muted:#8b98a9;--wire:#5b6b80;
+  --req:#5aa9ff;--arch:#4ade80;--safe:#fbbf24;color-scheme:dark}
+:root:not([data-theme="light"]),:root[data-theme="dark"]{--bg:#0a0e16}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1560px;margin:0 auto;padding:32px 20px 40px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
+h1{margin:0;font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.02em}
+.sub{margin:6px 0 0;color:var(--muted);font-size:14px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow-x:auto}
+svg{display:block;width:100%;min-width:1100px;height:auto}
+.note{margin:14px 4px 0;color:var(--muted);font-size:13px;font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>System engineering process flow</h1>
+      <p class="sub">Requirements, architecture and functional safety — how the artifacts feed each other</p>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--req)"></i>Requirement artifacts</span>
+      <span><i style="background:var(--arch)"></i>Architecture artifacts</span>
+      <span><i style="background:var(--safe)"></i>System safety</span>
+    </div>
+  </header>
+  <div class="card"><svg id="d" viewBox="0 0 1480 930" xmlns="http://www.w3.org/2000/svg" font-family="Inter,system-ui,sans-serif"></svg></div>
+  <p class="note">Flow is not a waterfall model — it is iterative in nature.</p>
+</div>
+<script>
+const C={req:'#5aa9ff',arch:'#4ade80',safe:'#fbbf24',wire:'#5b6b80',text:'#e6edf3',muted:'#8b98a9',panel:'#111723',bg:'#0a0e16'};
+const svg=document.getElementById('d');let out='';
+out+=`<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9z" fill="${C.wire}"/></marker></defs>`;
+const cols=[[30,'Requirements flow',C.req,400],[440,'Architecture flow',C.arch,560],[1010,'Safety flow',C.safe,460]];
+cols.forEach(([x,t,c,w])=>{
+  out+=`<rect x="${x}" y="30" width="${w}" height="880" rx="16" fill="${c}" fill-opacity=".035" stroke="${c}" stroke-opacity=".12"/>`;
+  out+=`<circle cx="${x+26}" cy="62" r="5" fill="${c}"/><text x="${x+40}" y="67" fill="${C.text}" font-size="15" font-weight="600" letter-spacing=".04em">${t.toUpperCase()}</text>`;
+});
+function wire(d,label,lx,ly,opts={}){
+  out+=`<path d="${d}" fill="none" stroke="${C.wire}" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#a)" ${opts.both?'marker-start="url(#a)"':''}/>`;
+  if(label){const lines=label.split('|');const w=Math.max(...lines.map(l=>l.length))*6.6+18,h=lines.length*15+9;
+    out+=`<rect x="${lx-w/2}" y="${ly-h/2}" width="${w}" height="${h}" rx="${h/2>12?8:h/2}" fill="${C.bg}" stroke="#263244"/>`;
+    lines.forEach((l,i)=>out+=`<text x="${lx}" y="${ly-h/2+17+i*15}" text-anchor="middle" fill="${C.muted}" font-size="11.5" font-weight="500">${l}</text>`);}
+}
+function box(x,y,w,h,c,title,opts={}){
+  out+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="12" fill="${c}" fill-opacity="${opts.fo??.12}" stroke="${c}" stroke-opacity=".7" stroke-width="1.2" ${opts.dash?'stroke-dasharray="6 5"':''}/>`;
+  if(!opts.noBar) out+=`<rect x="${x}" y="${y+14}" width="3" height="${h-28}" rx="1.5" fill="${c}"/>`;
+  const lines=title.split('|');const ty=opts.ty??(y+h/2-(lines.length-1)*10+6);
+  lines.forEach((l,i)=>out+=`<text x="${x+w/2}" y="${ty+i*20}" text-anchor="middle" fill="${C.text}" font-size="${opts.fs||15}" font-weight="600">${l}</text>`);
+}
+/* wires first so boxes sit above */
+wire('M210 214 V288','Transform',210,251);
+wire('M360 170 H420 V118 H705 V148','User needs',620,118);
+wire('M535 118 V148');
+wire('M780 185 H798');
+wire('M535 220 V270 H890 V220');
+wire('M705 220 V358','System view',705,310);
+wire('M560 400 H470 V330 H422','Function listing',470,368);
+wire('M558 645 H500 V480 H422','Parametric view',500,570,{both:1});
+wire('M230 550 V620 H130 V718','HW components|allocation',130,668);
+wire('M230 620 H330 V718','SW components|allocation',330,668);
+wire('M720 460 V598','Physical allocation',720,530);
+wire('M720 690 V818');
+wire('M820 690 V745 H1365 V562','Inputs for FMEA / FTA',1000,745);
+wire('M1365 645 H1252');
+wire('M1365 745 V790 H1240 V828','Traceability / compilation',1300,790);
+wire('M982 172 H1058','Prelim architecture',1020,138);
+wire('M880 378 H1000 V212 H1058','Item definition',1000,300);
+wire('M1220 230 V278','ASIL determination',1220,254);
+wire('M1220 328 V378','Function tree analysis',1220,353);
+wire('M1058 412 H882','Safe system|functions definition',965,412);
+wire('M1135 444 V598','Physical allocation',1135,520);
+wire('M1018 645 H882','Safe design|architecture def.',950,645);
+wire('M882 862 H1098','Traceability',990,862);
+/* requirements */
+box(60,150,300,64,C.req,'User requirements');
+box(40,290,380,260,C.req,'System requirement specification',{ty:330,fo:.08});
+box(70,370,320,150,C.req,'Interface control|document',{fo:.16,noBar:1});
+box(40,720,180,84,C.req,'Hardware|requirement spec',{fs:14});
+box(240,720,180,84,C.req,'Software|requirement spec',{fs:14});
+/* architecture */
+box(460,150,150,70,C.arch,'Use case|diagram',{fs:14});
+box(630,150,150,70,C.arch,'System boundary|diagram',{fs:14});
+box(800,150,180,70,C.arch,'Operational info|exchange (OIE)',{fs:14});
+box(560,360,320,100,C.arch,'Logical system definition|(functional flow diagrams)');
+box(560,600,320,90,C.arch,'System architecture|diagram');
+out+=`<rect x="560" y="820" width="320" height="84" rx="12" fill="none" stroke="#8b98a9" stroke-opacity=".6" stroke-dasharray="6 5"/>`;
+out+=`<text x="720" y="856" text-anchor="middle" fill="${C.text}" font-size="15" font-weight="600">For software and hardware</text><text x="720" y="877" text-anchor="middle" fill="${C.text}" font-size="15" font-weight="600">implementation</text>`;
+/* safety */
+box(1060,150,320,80,C.safe,'Hazard analysis &amp; risk|assessment (HARA)');
+box(1060,280,320,48,C.safe,'Safety goals');
+box(1060,380,320,64,C.req,'Functional safety|requirements',{fs:14});
+box(1270,480,190,80,C.safe,'Safety analysis|(inductive &amp; deductive)',{fs:13});
+box(1020,600,230,90,C.req,'Technical safety|requirements');
+box(1100,830,280,64,C.safe,'Safety case');
+svg.innerHTML=out;
+</script>
+</body>
+</html>
